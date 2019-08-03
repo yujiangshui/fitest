@@ -18,7 +18,6 @@ class TaskController extends Controller
     {
         $this->middleware(['auth'])->except('show', 'create', 'edit');  //Or ->only('store', 'update', 'destory');
         $this->taskService = $taskService;
-        $this->user = Auth::user();
     }
 
     /**
@@ -56,12 +55,13 @@ class TaskController extends Controller
     public function update(TaskRequest $request, int $taskId)
     {
         $request->validated();
-        $task = $this->user->tasks()->find($taskId);
+        $user = Auth::user();
+        $task = $user->tasks()->find($taskId);
 
         $this->authorize('match', $task);   // check if the authenticated user can match the task. The second param must be an object.
         $this->taskService->updateTask($request->all(), $task);
 
-        return response()->json($this->user->tasks()->find($taskId));
+        return response()->json($user->tasks()->find($taskId));
     }
 
     /**
