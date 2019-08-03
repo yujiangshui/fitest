@@ -46,4 +46,23 @@ class User extends Authenticatable
     public function setNameAttribute($value) {
         $this->attributes['name'] = ucfirst($value);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class)
+            ->orderBy('finished_at')
+            ->orderByDesc('updated_at');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logs()
+    {
+        return $this->hasMany(Log::class)
+            ->orderBy('created_at');
+    }
 }

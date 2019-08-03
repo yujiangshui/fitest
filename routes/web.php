@@ -18,3 +18,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group([ 'prefix' => 'tasks' ], function ($router) {
+    Route::get('/index', 'TaskController@index')->name('tasks.index');
+    Route::post('/store', 'TaskController@store')->name('tasks.store');
+    Route::put('/update/{taskId}', 'TaskController@update')->name('tasks.update');
+    Route::delete('/delete/{taskId}', 'TaskController@destory')->name('tasks.destory');
+    Route::put('/mark/{taskId}/done', 'TaskController@markTaskDone')->name('tasks.markDone');
+    Route::put('/mark/{taskId}/undone', 'TaskController@markTaskUndone')->name('tasks.markUndone');
+});
