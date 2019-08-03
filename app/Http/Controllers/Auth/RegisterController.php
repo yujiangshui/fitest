@@ -2,11 +2,11 @@
 
 namespace Fitest\Http\Controllers\Auth;
 
-use Fitest\User;
 use Fitest\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Fitest\Http\Requests\UserRegisterRequest;
+use Illuminate\Auth\Events\Registered;
+use Fitest\Services\UserService;
 
 class RegisterController extends Controller
 {
@@ -31,42 +31,37 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * @var UserService
+     */
+    protected $userService;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserService $userService)
     {
         $this->middleware('guest');
+        $this->userService = $userService;
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * It is used to rewrite a register function in RegistersUsers.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param  Fitest\Http\Requests\UserRegisterRequest  $request
+     * @return \Illuminate\Http\Response
      */
-    protected function validator(array $data)
+    public function register(UserRegisterRequest $request)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
+        $request->validated();
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \Fitest\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        //Registered is a class can be rewriten after successful registered. Event is similar as a listenr.
+        event(new Registered($user = $this->userService->createUser($request->all()))); 
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
     }
 }
