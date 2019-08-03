@@ -31,6 +31,7 @@ class TaskObserver
 
     /**
      * Handle the task "updated" event.
+     * The updated events include updated tasks, done tasks, undone tasks.
      *
      * @param  \Fitest\odels\Task  $task
      * @return void
@@ -41,9 +42,11 @@ class TaskObserver
             $desc = $task->finished_at 
             ? ('task ' . $task->id . ' is done by user '. $this->user->id)
             : ('task ' . $task->id . ' is undone by user '. $this->user->id);
-
-            $this->logService->createTaskLog($this->user, $desc);
+        } else {
+            $desc = 'task ' . $task->id . ' is updated by user '. $this->user->id;
         }
+
+        $this->logService->createTaskLog($this->user, $desc);
     }
 
     /**

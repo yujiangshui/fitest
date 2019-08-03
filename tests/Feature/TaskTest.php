@@ -80,6 +80,11 @@ class TaskTest extends TestCase
             'id' => $task->id,
             'name' => self::UPDATE_TASK
         ]);
+
+        $this->assertDatabaseHas('logs', [
+            'user_id'  => $user->id,
+            'desc' => 'Task ' . $task->id . ' is updated by user ' . $user->id,
+        ]);
     }
 
     /**
@@ -124,6 +129,11 @@ class TaskTest extends TestCase
             'id'  => $task->id,
             'name'     => self::CREATE_TASK
         ]);
+
+        $this->assertDatabaseHas('logs', [
+            'user_id'  => $user->id,
+            'desc' => 'Task ' . $task->id . ' is deleted by user ' . $user->id,
+        ]);
     }
 
     public function testMarkDone()
@@ -135,6 +145,17 @@ class TaskTest extends TestCase
 
         $this->put('/tasks/mark/' . $task->id . '/done/')
              ->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseHas('tasks', [
+                'user_id'  => $user->id,
+                'id' => $task->id,
+                'finished_at' => Carbon::now()
+            ]);
+
+        $this->assertDatabaseHas('logs', [
+                'user_id'  => $user->id,
+                'desc' => 'Task ' . $task->id . ' is done by user ' . $user->id,
+            ]);
     }
 
     public function testMarkUndone()
@@ -147,5 +168,16 @@ class TaskTest extends TestCase
         $this->put('/tasks/mark/' . $task->id . '/done/');
         $this->put('/tasks/mark/' . $task->id . '/undone/')
              ->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseHas('tasks', [
+                'user_id'  => $user->id,
+                'id' => $task->id,
+                'finished_at' => NULL
+            ]);
+
+        $this->assertDatabaseHas('logs', [
+                'user_id'  => $user->id,
+                'desc' => 'Task ' . $task->id . ' is undone by user ' . $user->id,
+            ]);
     }
 }
