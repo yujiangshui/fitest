@@ -21,7 +21,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of current user tasks.
      *
      * @return \Illuminate\Http\Response
      */
@@ -81,6 +81,12 @@ class TaskController extends Controller
         return response()->json($user->tasks);
     }
 
+    /**
+     * Mark a task has been done.
+     *
+     * @param integer $taskId
+     * @return void
+     */
     public function markTaskDone(int $taskId)
     {
         $user = Auth::user();
@@ -90,6 +96,12 @@ class TaskController extends Controller
         return response()->json($user->tasks);
     }
 
+    /**
+     * Reset a done task to undone.
+     *
+     * @param integer $taskId
+     * @return void
+     */
     public function markTaskUndone(int $taskId)
     {
         $user = Auth::user();
