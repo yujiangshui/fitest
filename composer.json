@@ -38,7 +38,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "Fitest\\": "app/"
         },
         "classmap": [
             "database/seeds",
