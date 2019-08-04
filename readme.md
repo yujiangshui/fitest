@@ -9,3 +9,10 @@
 <p>9.  ./vendor/bin/phpunit</p>
 <p>10. npm install</p>
 <p>11. npm run dev</p>
+
+<p>After all above steps have been done. You can login by username: admin, password: 12345678</p>
+<p>Otherwise, you also can login by username: admin@qq.com, password: 12345678</p>
+
+<p>I have deployed the project on AWS, the link is: http://13.210.14.131/fitest/public/index.php</p>
+
+<p>The frontend I am using BootstrapVue, the official document link is https://bootstrap-vue.js.org/<p>
