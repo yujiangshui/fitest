@@ -9,6 +9,7 @@
 <p>9.  ./vendor/bin/phpunit</p>
 <p>10. npm install</p>
 <p>11. npm run dev</p>
+<p>12. npm test</p>
 
 <p>After all above steps have been done. You can login by username: admin, password: 12345678</p>
 <p>Otherwise, you also can login by username: admin@qq.com, password: 12345678</p>
