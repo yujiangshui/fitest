@@ -3,12 +3,10 @@ import {
     mount,
     createLocalVue
 } from '@vue/test-utils';
-
-import Component from './TaskList.vue'
+import Component from './TaskList'; // name of your Vue component
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-
 
 let mock = new MockAdapter(axios);
 
@@ -67,7 +65,7 @@ describe('TaskList vue.', () => {
 
         axios.get('/tasks/index')
             .then(function (response) {
-                expect(response.data.response.length).toBe(1);
+                expect(response.data.response.length).toBe(3);
                 expect(response.data.response[0].user_id).toBe(1);
                 expect(response.data.response[0].id).toBe(3);
             });
